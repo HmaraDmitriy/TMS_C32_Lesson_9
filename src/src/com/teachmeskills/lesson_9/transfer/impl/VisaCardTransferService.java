@@ -4,49 +4,58 @@ import com.teachmeskills.lesson_9.model.account.Account;
 import com.teachmeskills.lesson_9.model.card.BaseCard;
 import com.teachmeskills.lesson_9.model.document.Check;
 import com.teachmeskills.lesson_9.transfer.CardTransferService;
-
+import java.util.Date;
 
 // TODO реализовать имплементацию интерфейса +
 public class VisaCardTransferService  implements CardTransferService {
 
+    public Check transferFromCardToCard(BaseCard senderCard, BaseCard receiverCard, double sum) {
+        String comment;
 
-
-    @Override
-    public Check transferFromCardToCard(BaseCard senderCard, BaseCard receiverCard, double sum, int data, int numberCart, String comment) {
         if (sum <= 0) {
-            return new Check(sum, data, numberCart, "Transfer failed: amount must be greater than zero.");
+            comment = "Transfer failed: amount must be greater than zero.";
+            return new Check(sum, new Date(), senderCard.cardNumber, comment);
         }
 
-        if (!((BaseCard) senderCard).checkCardLimitTransfer(sum)) {
-            return new Check(sum, data, numberCart, "Transfer failed: exceeded transfer limit.");
+        if (!senderCard.checkCardLimitTransfer(sum)) {
+            comment = "Transfer failed: exceeded transfer limit.";
+            return new Check(sum, new Date(), senderCard.cardNumber, comment);
         }
 
         if (senderCard.amount < sum) {
-            return new Check(sum, data, numberCart, "Transfer failed: insufficient funds.");
+            comment = "Transfer failed: insufficient funds.";
+            return new Check(sum, new Date(), senderCard.cardNumber, comment);
         }
 
         senderCard.amount -= sum;
         receiverCard.amount += sum;
-        return new Check(sum, data, numberCart, "Transfer completed successfully.");
+        comment = "Transfer completed successfully.";
+
+        return new Check(sum, new Date(), senderCard.cardNumber, comment);
     }
 
-    @Override
-    public Check transferFromCardToAccount(BaseCard senderCard, Account receiverAccount, double sum, int data, int numberCart, String comment) {
+    public Check transferFromCardToAccount(BaseCard senderCard, Account receiverAccount, double sum) {
+        String comment;
+
         if (sum <= 0) {
-            return new Check(sum, data, numberCart, "Transfer failed: amount must be greater than zero.");
+            comment = "Transfer failed: amount must be greater than zero.";
+            return new Check(sum, new Date(), senderCard.cardNumber, comment);
         }
 
-        if (!((BaseCard) senderCard).checkCardLimitTransfer(sum)) {
-            return new Check(sum, data, numberCart, "Transfer failed: exceeded transfer limit.");
+        if (!senderCard.checkCardLimitTransfer(sum)) {
+            comment = "Transfer failed: exceeded transfer limit.";
+            return new Check(sum, new Date(), senderCard.cardNumber, comment);
         }
 
         if (senderCard.amount < sum) {
-            return new Check(sum, data, numberCart, "Transfer failed: insufficient funds.");
+            comment = "Transfer failed: insufficient funds.";
+            return new Check(sum, new Date(), senderCard.cardNumber, comment);
         }
 
         senderCard.amount -= sum;
         receiverAccount.setBalance(receiverAccount.getBalance() + sum);
-        return new Check(sum, data, numberCart, "Transfer completed successfully.");
-    }
+        comment = "Transfer completed successfully.";
 
+        return new Check(sum, new Date(), senderCard.cardNumber, comment);
+    }
 }

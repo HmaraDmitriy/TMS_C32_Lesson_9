@@ -44,10 +44,11 @@ public class ApplicationRunner {
                         new VisaCard("63564", 654, new Date(), "Eva", "EU", 3)}, "LN67890");
 
         MasterCardTransferService transferService = new MasterCardTransferService();
-        Check check1 = transferService.transferFromCardToCard(client1.getCards()[0], client2.getCards()[0], 100, 20241027, 987654, "Transfer to Eva");
+
+        Check check1 = transferService.transferFromCardToCard(client1.getCards()[0], client2.getCards()[0], 100);
         check1.infoCheck();
 
-        Check check2 = transferService.transferFromCardToAccount(client1.getCards()[0], client2.getAccounts()[0], 150, 20241027, 987654, "Transfer to Eva");
+        Check check2 = transferService.transferFromCardToAccount(client1.getCards()[0], client2.getAccounts()[0], 150);
         check2.infoCheck();
     }
 }
